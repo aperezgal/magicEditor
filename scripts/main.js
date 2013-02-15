@@ -13,6 +13,12 @@ window.onload = function(){
       'image/gif': true
     };
 
+
+    //Bytes to KiloBytes conversion
+	function convertToKBytes(number) {
+		return (number / 1024).toFixed(1);
+	}
+
 	function fileSelect(evt) {
 	    evt.stopPropagation();
 	    evt.preventDefault();
@@ -22,7 +28,7 @@ window.onload = function(){
 	        var result = '';
 	        var file;
 	        for (var i = 0; file = files[i]; i++) {
-	            result += '<li>' + file.name + ' ' + file.size + ' bytes</li>';
+	            result += '<li>' + file.name + ' ' + convertToKBytes(file.size) + ' KB</li>';
 
 		        if (acceptedTypes[file.type] === true) {
 		            var reader = new FileReader();
@@ -32,10 +38,11 @@ window.onload = function(){
 	     				//image.width = 250;
 	     				console.log ("Fichero leído");
 
-	     				var divImage = document.getElementById('imageManipulation');
+	     				divImage = document.getElementById('imageManipulation');
 	     				//divImage.appendChild(image);
 
-	     				setTimeout(function(){drawImage(image)},2000)
+	     				//divImage.imgAreaSelect({ x1: 120, y1: 90, x2: 280, y2: 210 });
+	     				setTimeout(function(){drawImage(image)},500)
 	     				//;
 		            }
 		            reader.readAsDataURL(file);
@@ -51,10 +58,14 @@ window.onload = function(){
 	        alert('The File APIs are not fully supported in this browser.');
 	    }
 	}
+
+
+
 	 
 	function dragOver(evt) {
 	    evt.stopPropagation();
 	    evt.preventDefault();
+	    //dropTarget.addClass('hover');
 	    evt.dataTransfer.dropEffect = 'copy';
 	}
 	 
@@ -77,6 +88,10 @@ window.onload = function(){
 
 	var dropTarget = document.getElementById('dropTarget');
 	dropTarget.addEventListener('dragover', dragOver, false);
+	dropTarget.addEventListener('dragleave', function() {
+		//dropTarget.removeClass('hover');
+		return false;
+	});
 	dropTarget.addEventListener('drop', fileSelect, false);
     
 }
